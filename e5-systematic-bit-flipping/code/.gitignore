@@ -1,0 +1,6 @@
+# IDE configuration
+/.idea/
+
+# build artifacts
+/build/
+/experiment

@@ -1,0 +1,44 @@
+diff --git a/src/workload.cpp b/src/workload.cpp
+index 2fc519d..dbbf126 100644
+--- a/src/workload.cpp
++++ b/src/workload.cpp
+@@ -36,9 +36,9 @@ int workload::run() {
+     trigger::client trigger_client;
+     trigger_client.send_ready_to_runner();
+ 
+-    constexpr size_t NUM_ITERS = 64;
+-    constexpr size_t NUM_AGGRS = 256;
+-    constexpr size_t NUM_TOTAL_ACCESSES = 4096;
++    constexpr size_t NUM_ITERS = 1;
++    constexpr size_t NUM_AGGRS = 2;
++    constexpr size_t NUM_TOTAL_ACCESSES = 8192;
+ 
+     constexpr size_t num_pattern_iterations = NUM_TOTAL_ACCESSES / NUM_AGGRS;
+     _printf("aggressors         = %zu", NUM_AGGRS);
+@@ -53,25 +53,6 @@ int workload::run() {
+ 
+         program::program prog;
+ 
+-        // Marker rows (with last four row bits 0, then 1).
+-        std::array<dram_address, 2> START_MARKERS = {
+-            dram_address { SUB, 0, 0, 0, 0b000000, 0 },
+-            dram_address { SUB, 0, 0, 0, 0b111111, 0 },
+-        };
+-        for (auto& marker : START_MARKERS) {
+-            prog.add_instruction(program::instruction::clflush(marker.to_virt()));
+-        }
+-        prog.add_instruction(program::instruction::mfence());
+-        for (auto& marker : START_MARKERS) {
+-            prog.add_instruction(program::instruction::read(marker.to_virt()));
+-            prog.add_instruction(program::instruction::clflush(marker.to_virt()));
+-            prog.add_instruction(program::instruction::mfence());
+-        }
+-        // for (auto& marker : START_MARKERS) {
+-        //     prog.add_instruction(program::instruction::clflush(marker.to_virt()));
+-        // }
+-        // prog.add_instruction(program::instruction::mfence());
+-
+         std::vector<size_t> aggressors;
+         size_t last_aggr_row = 128;
+         while (aggressors.size() < NUM_AGGRS) {
+

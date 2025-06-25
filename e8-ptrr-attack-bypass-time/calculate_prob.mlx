@@ -1,0 +1,117 @@
+% Define constants
+pth = 0.091 / 100 * 2;
+
+% Time durations in seconds
+sec_in_a_week = 7 * 24 * 60 * 60;
+sec_in_a_day = 24 * 60 * 60;
+sec_in_an_hour = 60 * 60;
+
+% Attack attempts
+attacks_in_a_week = sec_in_a_week / 0.032;
+attacks_in_a_day = sec_in_a_day / 0.032;
+attacks_in_an_hour = sec_in_an_hour / 0.032;
+
+% Rowhammer threshold range
+RTH = 1000:1000:30000;
+psuccess_week = zeros(size(RTH));
+psuccess_day = zeros(size(RTH));
+psuccess_hour = zeros(size(RTH));
+
+for i = 1:length(RTH)
+    NRH = RTH(i);
+    nfmax = floor((32000000 / 45 - NRH) / 2);
+    nf = 0:nfmax;
+    psuccess = sum(((1 - pth/2).^(nf + NRH)) .* (pth/2).^nf);
+
+    psuccess_week(i) = 1 - (1 - psuccess)^attacks_in_a_week;
+    psuccess_day(i) = 1 - (1 - psuccess)^attacks_in_a_day;
+    psuccess_hour(i) = 1 - (1 - psuccess)^attacks_in_an_hour;
+end
+
+% Plotting
+figure;
+fig = gcf;
+inches_per_pt = 1 / 72.27;
+fig_width_pt = 229.5;
+fig_width_in = fig_width_pt * inches_per_pt;
+fig_height_in = fig_width_in * 0.2;
+fig.Position(3:4) = [fig_width_in, fig_height_in] * 100; % MATLAB uses pixels
+
+hold on;
+plot(RTH, psuccess_week, '-o', 'Color', [0.1 0.4 0.8], 'LineWidth', 1.5, 'MarkerSize', 5, ...
+    'MarkerFaceColor', [0.1 0.4 0.8], 'DisplayName', '1 Week');
+plot(RTH, psuccess_day, '-s', 'Color', [0.8 0.1 0.4], 'LineWidth', 1.5, 'MarkerSize', 5, ...
+    'MarkerFaceColor', [0.8 0.1 0.4], 'DisplayName', '1 Day');
+plot(RTH, psuccess_hour, '-^', 'Color', [0.2 0.6 0.2], 'LineWidth', 1.5, 'MarkerSize', 5, ...
+    'MarkerFaceColor', [0.2 0.6 0.2], 'DisplayName', '1 Hour');
+
+% Axis limits
+xlim([0.5*10^4, 3.0*10^4]);
+ylim([0, 1]);
+
+% LaTeX styling and tick placement
+% set(gca, 'FontName', 'Latin Modern Roman', 'FontSize', 9, ...
+%     'TickLabelInterpreter', 'latex', 'LineWidth', 1, ...
+%     'XAxisLocation', 'bottom', 'TickDir', 'out');  % y-ticks outside, top x-ticks off
+
+% set(gca, 'FontName', 'Latin Modern Roman', 'FontSize', 9, ...
+%     'TickLabelInterpreter', 'latex', 'LineWidth', 1, ...
+%     'XAxisLocation', 'bottom', 'TickDir', 'out');  % y-ticks outside, top x-ticks off
+ax = gca;
+
+set(ax, 'FontName', 'Latin Modern Roman', 'FontSize', 9, ...
+    'TickLabelInterpreter', 'latex', 'LineWidth', 1, ...
+    'XAxisLocation', 'bottom', 'TickDir', 'out');
+ax.XRuler.TickLabelGapOffset = 0;  % Remove any top tick labels
+
+xlabel('Rowhammer Threshold', 'Interpreter', 'latex', 'FontSize', 9);
+% ylabel('Success Probability', 'Interpreter', 'latex', 'FontSize', 9);
+% Remove default label and place a manual one at upper left
+yl = ylim;
+xl = xlim;
+
+% Estimate x-position just left of tick labels
+x_offset = xl(1) - 0.04135 * (xl(2) - xl(1));  % adjust if needed
+
+text(x_offset, yl(2)+0.25, 'Success Probability', ...
+    'Interpreter', 'latex', 'FontSize', 9, ...
+    'HorizontalAlignment', 'left', ...
+    'VerticalAlignment', 'top', ...
+    'Rotation', 0);  % no rotation (horizontal label)
+
+% X-axis ticks
+x_ticks = 5000:5000:max(RTH);
+xticks(x_ticks);
+xticklabels(arrayfun(@(x) sprintf('%dK', x/1000), x_ticks, 'UniformOutput', false));
+
+% Y-axis ticks
+yticks([0, 0.5, 1.0]);
+yticklabels({'0', '0.5', '1.0'});
+
+% Grid styling
+set(gca, 'YGrid', 'on', 'XGrid', 'off', 'GridLineStyle', '--', ...
+    'GridAlpha', 0.6, 'GridColor', [0.5 0.5 0.5]);
+
+% Axis color and border
+set(gca, 'XColor', [0.2 0.2 0.2], 'YColor', [0.2 0.2 0.2]);
+box on;  % plot border
+
+% Add legend with light gray border
+legend('Location', 'northeast', 'Interpreter', 'latex', ...
+    'FontSize', 9, 'EdgeColor', [0.7 0.7 0.7]);
+
+% Export
+% exportgraphics(gca, 'plot_atk_success_rate.pdf', 'ContentType', 'vector');
+
+% Tight inset and axes resizing to exact width
+set(gca, 'Units', 'inches');
+set(gca, 'Position', [0.5, 0.5, fig_width_in, fig_height_in]);  % [left bottom width height]
+
+% Set figure size to accommodate this axes position + margins
+fig.Position(3:4) = ([fig_width_in, fig_height_in] + 1) * 100;  % add margin
+
+
+exportgraphics(gcf, 'plot_atk_success_rate.pdf', 'ContentType', 'vector');
+
+
+hold off;

@@ -1,0 +1,8 @@
+# 1) Ignore every “data” directory (and everything beneath it)
+**/data/**
+
+# 2) But do not ignore any “pickled” subfolder under a data directory…
+!**/data/pickled/
+
+# 3) …nor its contents
+!**/data/pickled/**

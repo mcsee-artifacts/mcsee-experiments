@@ -1,0 +1,7 @@
+#pragma once
+
+#cmakedefine01 ZEN3
+#cmakedefine01 ZEN4
+#cmakedefine01 RAPTORLAKE
+
+#cmakedefine RANKS @RANKS@
