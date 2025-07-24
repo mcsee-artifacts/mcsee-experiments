@@ -106,7 +106,7 @@ def main():
     ax.legend(ncol=1, loc="upper right", frameon=True, edgecolor="gray", borderpad=0.3)
 
     plt.tight_layout(pad=0.2)
-    plt.savefig("../../plot_intel_ptrr_distribution_128iters_2aggs_8kacts_new.pdf", dpi=72)
+    plt.savefig("plot_intel_ptrr_distribution_128iters_2aggs_8kacts_new.pdf", dpi=72)
     plt.close()
 
 if __name__ == "__main__":

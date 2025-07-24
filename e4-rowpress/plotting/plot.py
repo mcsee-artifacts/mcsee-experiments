@@ -138,7 +138,7 @@ def main():
         columnspacing=0.9
     )
 
-    plt.savefig("../../rowpress_cols_vs_tAggON.pdf",
+    plt.savefig("rowpress_cols_vs_tAggON.pdf",
                 dpi=600, bbox_inches='tight')
 
 if __name__ == "__main__":

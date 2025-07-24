@@ -6,3 +6,5 @@
 
 # 3) …nor its contents
 !**/data/pickled/**
+
+figures/*.*
