@@ -160,7 +160,7 @@ lbl.set_va('bottom')      # anchor its bottom at y=1.02
 
 
 plt.tight_layout(pad=0.5)
-plt.savefig("../../sledgehammer_act2actdistances.pdf")
+plt.savefig("sledgehammer_act2actdistances.pdf")
 # plt.savefig("../../sledgehammer_act2actdistances.pgf")
 # plt.tight_layout()
 # plt.show()

@@ -14,10 +14,15 @@ Run Sledgehammer for a specific `NUM_BANKS` while capturing three traces of each
 
 The result should be similar as the `XMLdig` files we provide in `mcsee-data/e2-sledgehammer/raw.tar.zst`. For convenience, we also provide the decoded files in `mcsee-data/e2-sledgehammer/decoded.tar.zst`.
 
-
 ## Analysis
 
-For the analysis of the activation throughput, run:
+> [!IMPORTANT]
+> If you want to use the existing data, you must unpack first the `decoded.tar.zst` archive (located at `e2-sledgehammer/` in the mcsee-data repository) with
+> ```
+> zstd -d decoded.tar.zst --stdout | tar -xvf -
+> ```
+
+For the analysis of the activation throughput with the provided data, run:
 
 ```bash
 python3 analysis/activation_throughput.py ${MCSEE_DATA}$/e2-sledgehammer/decoded/

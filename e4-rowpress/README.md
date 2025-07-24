@@ -20,10 +20,16 @@ For convenience, we provide the captured data in `mcsee-data/e4-rowpress/raw.tar
 
 ## Analysis
 
+> [!IMPORTANT]
+> If you want to use the existing data, you must unpack first the `decoded.tar.zst` archive (located at `e4-rowpress/` in the mcsee-data repository) with
+> ```
+> zstd -d decoded.tar.zst --stdout | tar -xvf -
+> ```
+
 Run the `process.py` script by passing the directory of the decoded data:
 
 ```bash
-python3 analysis.py ${MCSEE_DATA}/e4-rowpress/decoded/
+python3 process.py ${MCSEE_DATA}/e4-rowpress/decoded/
 ```
 
 where `${MCSEE_DATA}` is the path to the McSee data repository.

@@ -38,7 +38,8 @@ all_data_median_per_bank = []
 # Generate mock data
 for num_banks in nbanks:
    cur_bank = []
-   for file in glob.glob("../data/pickled/sledgehammer-nbanks={num_banks}--0000?_actspertrefi.pkl"):
+   for file in glob.glob(f"../../data/pickled/sledgehammer-nbanks={num_banks}--0000?_actspertrefi.pkl"):
+      print(f"Processing file: {file}")
       with open(file, 'rb') as f:
          vals = pickle.load(f)
          for x in vals:

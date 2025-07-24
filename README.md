@@ -12,3 +12,14 @@ We list in the following the experiments of our papers (see Artifacts Appendix),
 | E6 (Existence of pTRR)               | 6.3 (RFM on Memory Controllers)           | Fig. 10       | [e6-ptrr-existence](./e6-ptrr-existence/)                   |
 | E7 (pTRR probability)                | 6.4 (Reverse Engineering Intel's pTRR)    | Fig. 11       | [e7-ptrr-probability](./e7-ptrr-probability/)               |
 | E8 (pTRR attack-bypass time)         | 6.4 (Reverse Engineering Intel's pTRR)    | Fig. 12       | [e8-ptrr-attack-bypass-time](./e8-ptrr-attack-bypass-time/) |
+
+
+### Plotting Dependencies
+
+Before generating any plots, create a new Python virtual environment and install the packages listed in the [`requirements.txt`](./requirements.txt) file:
+
+```
+python3 -m venv venv \
+   && source venv/bin/activate \
+   && pip install -r requirements.txt
+```

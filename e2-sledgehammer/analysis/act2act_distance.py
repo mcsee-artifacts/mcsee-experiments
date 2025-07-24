@@ -1,10 +1,16 @@
+#!/usr/bin/env python3
 import argparse
 import glob
 import statistics
 from collections import defaultdict
 from statistics import mean, median
+import sys
+import os
 
-DATA_PATH = "../data/decoded"
+"""
+This script calculates the distance between consecutive ACT commands to the same row in a DDR4 memory trace.
+It assumes decoded trace files (`--data-path <directory>`) as provided in the mcsee-data archive under e2-sledgehammer/decoded/.
+"""
 
 
 def calculate_act2act_distance(act2actidxs):
@@ -117,10 +123,20 @@ def detect_most_activated_rows(file: str):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Process number of banks.")
+    parser = argparse.ArgumentParser(description="Process number of banks and path to decoded trace files.")
     parser.add_argument('--nbanks', type=int, required=False, help='Number of banks (integer)')
+    parser.add_argument('--data-path', type=str, required=True,
+                        help='Path to the decoded trace files as found in the mcsee-data archive under e2-sledgehammer/decoded/')
 
     args = parser.parse_args()
+
+    DATA_PATH = args.data_path
+
+    # Check if DATA_PATH contains any CSV files
+    csv_files = glob.glob(os.path.join(DATA_PATH, '**', '*.csv'), recursive=True)
+    if not csv_files:
+        print(f"ERROR: No CSV files found in directory '{DATA_PATH}'. Please provide a valid path containing decoded trace CSV files.")
+        sys.exit(1)
 
     banks = []
     if args.nbanks:
